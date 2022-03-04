@@ -1,0 +1,11 @@
+<template>
+    <lightning-card title="LWC Subscriber">
+        <p class="slds-p-horizontal_small">
+            <template for:each={studentList} for:item="student">
+                <div key={student.Id}>
+                    <a href="#" data-value={student.Id} onclick={handleClick}>{student.TenHS__c}</a>
+                </div>
+            </template>
+        </p>
+    </lightning-card>
+</template>

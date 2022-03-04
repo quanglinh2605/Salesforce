@@ -1,0 +1,11 @@
+<template>
+    <lightning-card icon-name="standard:student" title="Student"
+        ondrop={dropElement} ondragover={allowDrop}>
+        <div style="text-align: center;">{message}</div>
+        <lightning-record-form if:true={studentId}
+            record-id={studentId}
+            object-api-name="HocSinh__c"
+            fields={fields}>
+        </lightning-record-form>
+    </lightning-card>
+</template>

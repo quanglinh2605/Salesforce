@@ -1,0 +1,62 @@
+<aura:component controller="StudentLightningCtrl">
+    
+    <aura:method name ="getModalStudent" action="{!c.getModalStudent}">
+        <aura:attribute name="Id" type="String"/>
+    </aura:method>
+
+    <aura:attribute name="isModalOpen" type="boolean" default="false"/>
+    <aura:attribute name="currentStudent" type="HocSinh__c"/>
+    <aura:attribute name="lops" type="List" />
+
+    <aura:registerEvent name="reload_evt" type="c:student_reload_evt"/>
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    
+    <div class="slds-m-around_xx-large">
+        <aura:if isTrue="{!v.isModalOpen}">
+            <!-- Modal/Popup Box starts here-->
+            <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+                <div class="slds-modal__container">
+                    
+                    <!--HEADER START-->
+                    <header class="slds-modal__header">
+                        <lightning:buttonIcon iconName="utility:close"
+                                              onclick="{! c.closeModel }"
+                                              alternativeText="close"
+                                              variant="bare-inverse"
+                                              class="slds-modal__close"/>
+                        <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">Create Student</h2>
+                    </header>
+                    <!--HEADER END-->
+                    
+                    <!--NOI DUNG START-->
+                    <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                        <lightning:input type="text" label="Ho hoc sinh" value="{!v.currentStudent.HoHS__c}"/>
+                        <lightning:input type="text" label="Ten hoc sinh" value="{!v.currentStudent.TenHS__c}"/>
+                        <lightning:input type="checkbox" label="Gioi tinh" value="{!v.currentStudent.GioiTinh__c}"/>
+                        <lightning:input type="date" label="Ngay sinh" value="{!v.currentStudent.NgaySinh__c}"/>
+                        <lightning:input type="text" label="Diem 1" value="{!v.currentStudent.Diem1__c}"/>
+                        <lightning:input type="text" label="Diem 2" value="{!v.currentStudent.Diem2__c}"/>
+                        <lightning:input type="text" label="Diem 3" value="{!v.currentStudent.Diem3__c}"/>
+                        <lightning:combobox label="Select class" value="{!v.currentStudent.Lop__c}" placeholder="Select Class" options="{!v.lops }"/> 
+                    </div>
+                    <!--NOI DUNG END-->
+                    
+                    <!--FOOTER START-->
+                    <footer class="slds-modal__footer">
+                        <lightning:button variant="neutral"
+                                          label="Cancel"
+                                          title="Cancel"
+                                          onclick="{!c.closeModel }"/>
+                        <lightning:button variant="brand"
+                                          label="Save"
+                                          title="Save"
+                                          onclick="{!c.saveStudent}"/>
+                    </footer>
+                    <!--FOOTER END-->
+                    
+                </div>
+            </section>
+            <div class="slds-backdrop slds-backdrop_open"></div>
+        </aura:if>
+    </div>    
+</aura:component>	

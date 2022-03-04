@@ -1,0 +1,229 @@
+<!--/**
+* Name page：       Index
+* Function name:    Show list student
+* @created：        2020/12/08 Linh Vo Duc Quang
+* @modified： 
+*/-->
+<apex:page controller="StudentController" sidebar="false" showheader="false" standardstylesheets="true" docType="HTML-5.0">
+    <apex:stylesheet value="{!URLFOR($Resource.student, 'staticresources/css/student.css')}"/>
+    <apex:form id="searchForm">
+        <apex:outputPanel id="tstpopupPanel">
+            <apex:outputPanel styleClass="popupBackground" layout="block" id="popupBackgroundPanel"/>
+            <apex:outputPanel styleClass="custPopup" layout="block" id="custPopupPanel">
+                Do you want to delele?.<br/><br/><br/>
+                <apex:commandButton id="deleteButton" value="Delete" onclick="removeStudent();return false;"/>
+                <apex:commandButton id="cancelButton" value="Cancel" onclick="cancel();return false;"/>
+            </apex:outputPanel>
+        </apex:outputPanel>
+        <apex:outputPanel id="messagePanel">
+            <apex:outputPanel styleClass="popupBackground" layout="block" id="messageErrorBackgroundPanel"/>
+            <apex:outputPanel styleClass="custPopup" layout="block" id="messageErrorPanel">
+                Please choose the student that you want to delete?.<br/><br/><br/>
+                <apex:commandButton id="okButton" value="OK" onclick="cancel();return false;"/>
+            </apex:outputPanel>
+        </apex:outputPanel>
+        <apex:pageBlock title="Search" mode="edit">
+            <apex:pageBlockSection title="My Content Search" columns="2">
+                <apex:outputPanel>
+                    <table>
+                        <tr>
+                            <td>Tên: </td>
+                            <td><apex:inputText value="{!tenString}"/>
+                            </td>
+                            <td></td>
+                            <td><span><apex:inputCheckbox value="{!isSortByName}"/>Sắp xếp tăng dần theo tên</span></td>
+                        </tr>
+                        <tr>
+                            <td>Lớp: </td>
+                            <td><apex:selectList value="{!lopId}" title="Choose a class" size="1">
+                                <apex:selectOptions value="{!items}"/>
+                            </apex:selectList></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>Ngày sinh</td>
+                            <td><apex:input value="{!beginDate}" type="date"/></td>
+                            <td><p style="padding-left: 13px; font-weight: bold;font-size: 16px;">~</p></td>
+                            <td><apex:input value="{!endDate}" type="date"/></td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td><apex:commandButton action="{!searchStudent}" value="Tim Kiem" id="searchButton" reRender="resultTable, infoMessages" styleClass="js-overlay" oncomplete="stopLoading();return false;"/></td>
+                            <td><apex:commandButton action="{!goToNewStudentPage}" value="Them moi" id="addButton" styleClass="js-overlay"  oncomplete="stopLoading();return false;"/></td>
+                            <td><apex:commandButton onclick="deleteList()" value="Xoa" id="removeButton" oncomplete="reloadPage();return false;"/></td>
+                        </tr>
+                    </table>
+                </apex:outputPanel>               
+            </apex:pageBlockSection>
+        </apex:pageBlock>
+        <br/><br/>
+        <Apex:pagemessages id="infoMessages"></Apex:pagemessages>
+        <apex:pageBlock title="Students List" id="resultTable">
+            <apex:outputPanel>
+                <span style="font-weight: bold;font-size:16px;"> </span>
+                <apex:outputText style="font-weight: bold;font-size:16px;" value="Số lượng: {!students.size}"/>
+                <apex:pageBlockTable value="{!students}" var="item">
+                    <apex:column>
+                        <apex:facet name="header">
+                            <input type="checkbox" name="checkAll" id="allCheckbox" onchange="tick()"/>
+                        </apex:facet>
+                        <input type="checkbox" name="rowCheckbox" value="{!item.Id}" onchange="selectCheckbox();return false;"/></apex:column>
+                    <apex:column value="{!item.HoHS__c}">
+                        <apex:facet name="header">Họ học sinh</apex:facet>
+                    </apex:column>
+                    <apex:column>
+                        <apex:facet name="header">Tên học sinh</apex:facet>
+                        <a href="/apex/DetailStudentPage?id={!item.Id}" class="js-overlay">{!item.TenHS__c}</a>
+                    </apex:column>
+                    <apex:column>
+                        <apex:facet name="header">Ngày sinh</apex:facet>
+                        <apex:outputText value="{0,date, dd/MM/yyyy}">
+                            <apex:param value="{!item.NgaySinh__c}"/>
+                        </apex:outputText>
+                    </apex:column>
+                    <apex:column>
+                        <apex:facet name="header">Giới tính</apex:facet>
+                        <p>{!If(item.GioiTinh__c == true, 'Nam', 'Nữ')}</p>
+                    </apex:column>
+                    <apex:column value="{!item.Diem1__c}">
+                        <apex:facet name="header">Điểm toán</apex:facet>
+                    </apex:column>
+                    <apex:column value="{!item.Diem2__c}">
+                        <apex:facet name="header">Điểm lý</apex:facet>
+                    </apex:column>
+                    <apex:column value="{!item.Diem3__c}">
+                        <apex:facet name="header">Điểm hoá</apex:facet>
+                    </apex:column>
+                    <apex:column value="{!item.DiemTB__c}">
+                        <apex:facet name="header">Điểm trung bình</apex:facet>
+                    </apex:column>
+                    <apex:column value="{!item.TinhTrang__c}" styleClass = "{! If(item.TinhTrang__c == 'Rot' ,'redColour','')}">
+                        <apex:facet name="header">Tình trạng</apex:facet>
+                    </apex:column>                        
+                    <apex:column>
+                        <apex:commandButton onclick="editRecord('{!item.Id}'); return false;" value="Edit" id="editButton"/>
+						<apex:commandButton onclick="removeRecord('{!item.Id}'); return false;" value="Delete" id="removeButton"/>
+                    </apex:column>
+                </apex:pageBlockTable>
+            </apex:outputPanel>
+        </apex:pageBlock>
+
+        <apex:actionFunction action="{!deleteRecord}" oncomplete="reloadPage();return false;" name="doRemove" reRender="resultTable">
+            <apex:param name="studentId" value="" />
+        </apex:actionFunction>
+        
+        <apex:actionFunction action="{!multilDelete}" oncomplete="reloadPage();return false;" name="doRemoveList" reRender="resultTable">
+            <apex:param name="idList" value="" />
+        </apex:actionFunction>
+
+        <apex:actionFunction action="{!gotoEditStudentPage}" name="editStudent">
+            <apex:param name="studentId" value="" />
+        </apex:actionFunction>
+
+        <apex:actionFunction action="{!reloadPage}" name="reloadPage" reRender="resultTable">
+        </apex:actionFunction>
+
+    </apex:form>
+    <!-- Uploaded jQuery as a static resource -->
+    <apex:includeScript value="https://code.jquery.com/jquery-3.1.1.min.js" />
+    <apex:includeScript value="{!URLFOR($Resource.student, 'staticresources/js/loadingoverlay.js')}"/>
+    <script type="text/javascript">
+        j$ = jQuery.noConflict();
+        var studentId = '';
+        var txt = [];
+        
+        j$('.js-overlay').on('click', function() {
+            j$('[id$=searchForm]').LoadingOverlay('show');
+        })
+
+        function stopLoading() {
+            j$('[id$=searchForm]').LoadingOverlay('hide');
+            if (j$('[id$=infoMessages]').find("div").is(":visible") == true) {
+                j$('[id$=resultTable]').hide();
+            }
+        }
+
+        function removeStudent() {
+            j$('[id$=popupBackgroundPanel]').css('display', 'none');
+            j$('[id$=custPopupPanel]').css('display', 'none');
+            if (studentId != '') {
+                j$('[id$=searchForm]').LoadingOverlay('show');
+                doRemove(studentId);
+                studentId = '';
+            } else {
+                var ids = txt.toString();
+                j$('[id$=searchForm]').LoadingOverlay('show');
+                doRemoveList(ids);
+            }
+            return false;
+        }
+
+        function removeRecord(recordId) {
+            studentId = recordId;
+            j$('[id$=popupBackgroundPanel]').css('display', 'block');
+            j$('[id$=custPopupPanel]').css('display', 'block');
+            return false;
+        }
+
+        function cancel() {
+            j$('[id$=popupBackgroundPanel]').css('display', 'none');
+            j$('[id$=custPopupPanel]').css('display', 'none');
+            j$('[id$=messageErrorBackgroundPanel]').css('display', 'none');
+            j$('[id$=messageErrorPanel]').css('display', 'none');
+            return false;
+        }
+
+        function deleteList() {
+            var x = document.getElementsByName("rowCheckbox");
+            txt = [];
+            for (i = 0; i < x.length; i++) {
+                if (x[i].checked) {
+                    txt.push(x[i].value);
+                }
+            }
+            if (txt.length > 0) {
+                j$('[id$=popupBackgroundPanel]').css('display', 'block');
+                j$('[id$=custPopupPanel]').css('display', 'block');
+            } else {
+                j$('[id$=messageErrorBackgroundPanel]').css('display', 'block');
+                j$('[id$=messageErrorPanel]').css('display', 'block');
+            }
+            return false;
+        }
+
+        function tick() {
+            var x = document.getElementById('allCheckbox');
+            var chkList = document.getElementsByName('rowCheckbox');
+            if (x.checked) {
+                for (i = 0; i < chkList.length; i++) {
+                    chkList[i].checked = true;
+                }
+            } else {
+                for (i = 0; i < chkList.length; i++) {
+                    chkList[i].checked = false;
+                }
+            }
+        }   
+
+        function selectCheckbox() {
+            var x = j$('#allCheckbox')[0];
+            x.checked = true;
+            var chkList = document.getElementsByName('rowCheckbox');
+            for (i = 0; i < chkList.length; i++) {
+                if (chkList[i].checked == false) {
+                    x.checked = false;
+                }
+            }
+        }
+
+        function editRecord(recordId) {
+            j$('[id$=searchForm]').LoadingOverlay('show');
+			editStudent(recordId);
+		}
+
+		function reloadPage() {
+            j$('[id$=searchForm]').LoadingOverlay('hide');
+            reloadPage();
+        }
+    </script>
+</apex:page>

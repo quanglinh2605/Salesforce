@@ -1,0 +1,23 @@
+trigger StudentTrigger on HocSinh__c (before insert, after insert, before delete, after delete, before update, after update) {
+    if(Trigger.isBefore){
+        if(StaticTest.shouldRunTrigger()){
+            if(Trigger.isInsert){
+                TriggerHandler.validate(Trigger.new);
+            }
+            if(Trigger.isUpdate){
+                TriggerHandler.validate(Trigger.new);
+            }
+        }
+    }
+    if(Trigger.isAfter){
+        if(Trigger.isInsert){
+            TriggerHandler.affter(Trigger.new);
+        }
+        if(Trigger.isDelete){
+            TriggerHandler.affter(Trigger.old);
+        }
+        if(trigger.isUpdate){
+            TriggerHandler.affter(Trigger.old);
+        }
+    }
+}

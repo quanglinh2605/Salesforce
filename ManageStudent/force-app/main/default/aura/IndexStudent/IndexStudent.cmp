@@ -1,0 +1,179 @@
+<aura:component controller="StudentLightningCtrl" implements="flexipage:availableForAllPageTypes">
+    
+    <aura:attribute name="ten" type="String"/>
+    <aura:attribute name="lopId" type="String" default="0"/>
+    <aura:attribute name="sortByName" type="Boolean" default="false"/>
+    <aura:attribute name="beginDate" type="Date"/>
+    <aura:attribute name="endDate" type="Date"/>
+    
+    <aura:attribute name="lops" type="List" />
+    <aura:attribute name="listId" type="String"/>    
+
+    <aura:attribute name="mydata" type="Object"/>
+    <aura:attribute name="mycolumns" type="List"/>
+
+    <aura:attribute name="allData" type="List"/>
+    <aura:attribute name="currentPageNumber" type="Integer" default="1"/>
+    <aura:attribute name="pageSize" type="Integer" default="3"/>
+    <aura:attribute name="totalPages" type="Integer" default="0"/>
+    <aura:attribute name="pageList" type="List"/>
+
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    
+    <aura:handler name="reload_evt" event="c:student_reload_evt" action="{!c.handleReloadEvent}"/>
+
+    <table style="margin-left: 0px; width: 700px;">
+        <tr>
+            <td>Ten: </td>
+            <td><lightning:input type="text" value="{!v.ten}" variant="label-hidden"/></td>
+            <td></td>
+            <td><lightning:input type="checkbox" value="{!v.sortByName}" onchange="{!c.sort}" label="Sap xep tang dan theo ten"/></td>
+        </tr>
+        <tr>
+            <td>Lop: </td>
+            <td><lightning:combobox variant="label-hidden" placeholder="Select Class" options="{!v.lops }" onchange="{!c.comboboxChange}"/></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td>Ngay sinh:</td>
+            <td><lightning:input type="date" variant="label-hidden" value="{!v.beginDate}"/></td>
+            <td><p style="padding-left: 40px; font-weight: bold;font-size: 40px;">~</p></td>
+            <td><lightning:input type="date" variant="label-hidden" value="{!v.endDate}" /></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td> <lightning:button onclick="{!c.search}"
+                label="Search"
+                iconName="utility:search"
+                iconPosition="left"
+                variant="neutral"
+                type="submit"/></td>
+            <td><lightning:button onclick="{!c.newStudent}"
+                label="New"
+                iconName="utility:new"
+                iconPosition="left"
+                variant="neutral"
+                class="slds-size_4-of-10"
+                type="submit"/></td>
+            <td><lightning:button onclick="{!c.listDelete}"
+                label="Delete"
+                iconName="utility:clear"
+                iconPosition="left"
+                variant="neutral"
+                class="slds-size_4-of-10"
+                type="submit"/></td>
+        </tr>
+    </table>
+    <br/><br/>
+    <!-- <table class="slds-table slds-no-row-hover slds-table_bordered ">
+        <thead>
+            <tr class="slds-text-heading_label">
+                <th scope="col">STT</th>
+                <th scope="col">Ho</th>
+                <th scope="col">Ten</th>
+                <th scope="col">Ngay Sinh</th>
+                <th scope="col">Gioi Tinh</th>
+                <th scope="col">Diem1</th>
+                <th scope="col">Diem2</th>
+                <th scope="col">Diem3</th>
+                <th scope="col">DiemTB</th>
+                <th scope="col">Tinh Trang</th>
+                <th scope="col">Name</th>
+            </tr>
+        </thead>
+        <tbody>
+            <aura:iteration items="{!v.students}" var="item" indexVar="index">
+                <tr>
+                    <td>
+                        {!index+1}
+                    </td>
+                    <td>
+                        {!item.HoHS__c}
+                    </td>
+                    <td>
+                        {!item.TenHS__c}
+                    </td>
+                    <td>
+                        <ui:outputDate value="{!item.NgaySinh___c}"/>
+                    </td>
+                    <td>
+                        {!item.GioiTinh__c}
+                    </td>
+                    <td>
+                        {!item.Diem1__c}
+                    </td>
+                    <td>
+                        {!item.Diem2__c}
+                    </td>
+                    <td>
+                        {!item.Diem3__c}
+                    </td>
+                    <td>
+                        {!item.DiemTB__c}
+                    </td>
+                    <td>
+                        {!item.TinhTrang__c}
+                    </td>
+                    <td>
+                        <lightning:buttonIcon name="{!item.Id}" onclick="{!c.editAccount}" size="small" iconName="utility:edit" alternativeText="Edit"/>
+                        <lightning:buttonIcon name="{!item.Id}" onclick="{!c.deleteAccount}" size="small" iconName="utility:delete" alternativeText="Delete"/>
+                    </td>
+                </tr>
+            </aura:iteration>
+        </tbody>
+    </table> -->
+    <span style="font-size: large;"> So luong: {!v.mydata.length}</span>
+    <lightning:datatable data="{! v.mydata }"
+        columns="{! v.mycolumns }"
+        keyField="id"
+        onrowselection="{! c.getSelectedRows }"
+        onrowaction="{!c.handleRowAction}"
+        showRowNumberColumn="true"/>
+
+    <lightning:layoutItem padding="around-small" flexibility="auto">
+        <lightning:button label="First" iconName="utility:left" iconPosition="left"
+                            onclick="{!c.onFirst}" disabled="{! v.currentPageNumber == 1}"/>
+        <lightning:button iconName="utility:chevronleft" iconPosition="left"
+                            onclick="{!c.onPrev}" disabled="{! v.currentPageNumber == 1}"/>
+        <span class="slds-p-horizontal_x-small">
+            <a onclick="{!c.processMe}" name="1" 
+                class="{! (v.currentPageNumber == 1) ? 'selected' : ''}">1</a>
+        </span>
+        <aura:if isTrue="{!and(v.totalPages > 10, v.currentPageNumber >= 5)}">        
+            <span class="slds-p-horizontal_xxx-small">
+                <a>...</a>
+            </span>
+        </aura:if>
+
+        <aura:iteration items="{!v.pageList}" var="item">
+            <span class="slds-p-horizontal_x-small">
+                <a onclick="{!c.processMe}" name="{!item}"
+                    class="{! (v.currentPageNumber == item) ? 'selected' : ''}">{!item}</a>
+            </span>
+        </aura:iteration>
+
+        <aura:if isTrue="{!and(v.totalPages > 10, (v.totalPages - 5) >= v.currentPageNumber)}">        
+            <span class="slds-p-horizontal_xxx-small">
+                <a>...</a>
+            </span>
+        </aura:if>
+
+        <aura:if isTrue="{!v.totalPages != 1}">
+            <span class="slds-p-horizontal_x-small">
+                <a onclick="{!c.processMe}" name="{!v.totalPages}"
+                    class="{! (v.currentPageNumber == v.totalPages) ? 'selected' : ''}">{!v.totalPages}</a>
+            </span>
+        </aura:if>
+        
+        <lightning:button iconName="utility:chevronright" iconPosition="right" 
+                            disabled="{! v.currentPageNumber == v.totalPages}" onclick="{!c.onNext}"/>
+        <lightning:button label="Last" iconName="utility:right" iconPosition="right" 
+                            disabled="{! v.currentPageNumber == v.totalPages}" onclick="{!c.onLast}"/>
+    </lightning:layoutItem>
+
+    <c:CreateStudent aura:id="create_student"/>
+    <c:EditStudent aura:id="edit_student"/>
+    <c:DeleteStudent aura:id="delete_student"/>
+    <c:DetailStudent aura:id="detail_student"/>
+    <c:MultiDelete aura:id="multi_delete"/>
+</aura:component>

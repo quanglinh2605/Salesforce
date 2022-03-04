@@ -1,0 +1,86 @@
+<!--/**
+* Name page：       Edit Student
+* Function name:    Update a student
+* @created：        2020/12/08 Linh Vo Duc Quang
+* @modified： 
+*/-->
+<apex:page controller="StudentController" showHeader="false" sidebar="false" docType="HTML-5.0" action="{!initStudentById}" >
+    <apex:stylesheet value="{!URLFOR($Resource.student, 'staticresources/css/student.css')}"/>
+    <apex:form id="editForm">
+        <apex:pageBlock title="Student" mode="edit">
+            <a href="/apex/studentPage" class="js-overlay">Quay lai</a>
+            <apex:pageBlockSection title="Edit Student" columns="2">
+                <apex:outputPanel >
+                    <table>
+                        <tr>
+                            <td>Ho</td>
+                            <td><apex:inputField value="{!currentStudent.HoHS__c}"/></td>
+                        </tr>
+                        <tr>
+                            <td>Ten</td>
+                            <td><apex:inputField value="{!currentStudent.TenHS__c}"/></td>
+                        </tr>
+                        <tr>
+                            <td>Gioi tinh</td>
+                            <td>
+                                <apex:inputHidden id="genderInput" value="{!currentStudent.GioiTinh__c}"/>
+                                <input type="radio" id="maleRadio" name="gender" value="male" onchange="selectGender();return false;" />
+                                <label for="maleRadio">Male</label>
+                                <input type="radio" id="femaleRadio" name="gender" value="female" onchange="selectGender();return false;" />
+                                <label for="femaleRadio">Female</label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Ngay sinh</td>
+                            <td><apex:inputField id="dateInput" value="{!currentStudent.NgaySinh__c}"/></td>
+                        </tr>
+                        <tr>
+                            <td>Diem 1</td>
+                            <td><apex:inputField value="{!currentStudent.Diem1__c}"/></td>
+                        </tr>
+                        <tr>
+                            <td>Diem 2</td>
+                            <td><apex:inputField value="{!currentStudent.Diem2__c}"/></td>
+                        </tr>
+                        <tr>
+                            <td>Diem 3</td>
+                            <td><apex:inputField value="{!currentStudent.Diem3__c}"/></td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td><apex:commandButton action="{!save}" value="Cap nhat" id="saveButton" styleClass="js-overlay"/></td>
+                        </tr>
+                    </table>
+                </apex:outputPanel>
+            </apex:pageBlockSection>
+        </apex:pageBlock> 
+
+        <apex:actionFunction action="{!ReloadPage}" name="reloadPage">
+        </apex:actionFunction>
+                   
+    </apex:form>
+    <apex:includeScript value="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js" />
+    <apex:includeScript value="{!URLFOR($Resource.student, 'staticresources/js/loadingoverlay.js')}"/>
+    <script type="text/javascript">
+        j$ = jQuery.noConflict();
+
+        j$('.js-overlay').on('click', function() {
+            j$('[id$=editForm]').LoadingOverlay('show');
+        })
+
+        if(j$('[id$=genderInput]')[0].value == "true"){
+            j$('[id$=maleRadio]')[0].checked = true;
+        }
+        if(j$('[id$=genderInput]')[0].value == "false"){
+            j$('[id$=maleRadio]')[1].checked = true;
+        }
+        function selectGender(){
+            if(j$('[id$=maleRadio]')[0].checked){
+                j$('[id$=genderInput]')[0].value = true;
+            }
+            if(j$('[id$=maleRadio]')[1].checked){
+                j$('[id$=genderInput]')[0].value = false;
+            }
+        }
+    </script>
+</apex:page>

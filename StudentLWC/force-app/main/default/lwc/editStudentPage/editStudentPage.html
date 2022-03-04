@@ -1,0 +1,53 @@
+<template>
+    <div class="slds-m-around_xx-large">
+        <!--Use template if:true to display/hide popup based on isModalOpen value--> 
+        <template if:true={isOpenModal}>
+            <!-- Modal/Popup Box LWC starts here -->
+            <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+                <div class="slds-modal__container">
+                    
+                    <!--HEADER START-->
+                    <header class="slds-modal__header">
+                        <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close" onclick={closeModal}>
+                            <lightning-icon icon-name="utility:close"
+                                alternative-text="close"
+                                variant="inverse"
+                                size="small" 
+                                onclick={closeModal}></lightning-icon>
+                            <span class="slds-assistive-text">Close</span>
+                        </button>
+                        <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">Edit Student</h2>
+                    </header>
+                    <!--HEADER END-->
+                    
+                    <!--NOI DUNG START-->
+                    <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                        <lightning-input type="text" label="Ho hoc sinh" value={student.HoHS__c} data-field="HoHS" class="slds-m-bottom-small"></lightning-input>
+                        <lightning-input type="text" label="Ten hoc sinh" value={student.TenHS__c} data-field="TenHS" class="slds-m-bottom-small"></lightning-input>
+                        <lightning-input type="checkbox" label="Gioi tinh" checked={student.GioiTinh__c} data-field="Gender" class="slds-m-bottom-small"></lightning-input>
+                        <lightning-input type="date" label="Ngay sinh" value={student.NgaySinh__c} data-field="Birth" onchange={handlechange} required class="slds-m-bottom-small"></lightning-input>
+                        <lightning-input type="text" label="Diem 1" value={student.Diem1__c} data-field="Diem1" required class="slds-m-bottom-small"></lightning-input>
+                        <lightning-input type="text" label="Diem 2" value={student.Diem2__c} data-field="Diem2" required class="slds-m-bottom -small"></lightning-input>
+                        <lightning-input type="text" label="Diem 3" value={student.Diem3__c} data-field="Diem3" required class="slds-m-bottom-small"></lightning-input>
+                    </div>
+                    <!--NOI DUNG END-->
+                    
+                    <!--FOOTER START-->
+                    <footer class="slds-modal__footer">
+                        <lightning-button variant="neutral"
+                                          label="Cancel"
+                                          title="Cancel"
+                                          onclick={closeModal}></lightning-button>
+                        <lightning-button variant="brand"
+                                          label="Save"
+                                          title="Save"
+                                          onclick={updateStudent}></lightning-button>
+                    </footer>
+                    <!--FOOTER END-->
+                    
+                </div>
+            </section>
+            <div class="slds-backdrop slds-backdrop_open"></div>
+        </template>
+        </div>    
+</template>

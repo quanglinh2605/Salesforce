@@ -1,0 +1,75 @@
+<apex:page controller="AccountController">
+	
+	<apex:form >
+		
+		<apex:inputText value="{!searchCondition}" id="searchInput"/>
+		<apex:commandButton action="{!searchAccount}" value="Tim Kiem" reRender="resultTableId"/>
+
+		<apex:commandButton onclick="editRecord(''); return false;" value="New Record"/>
+
+		<apex:outputPanel id="resultTableId">
+			<apex:variable var="rowNum" value="{!0}" />
+			<table>
+				<tr>
+					<th>STT</th>
+					<th>Name</th>
+					<th>Action</th>
+				</tr>
+
+				
+				<apex:repeat value="{!accounts}" var="acc">
+					<apex:variable var="rowNum" value="{!rowNum + 1}"/>
+
+					<tr>
+						<td>{!rowNum}</td>
+						<td>{!acc.Name}</td>
+						<td>
+							<apex:commandButton onclick="editRecord('{!acc.Id}'); return false;" value="Edit" id="editBtnId" />
+							<apex:commandButton onclick="removeRecord('{!rowNum-1}'); return false;" value="Delete" id="removeBtnId" />
+						</td>
+					</tr>
+
+				</apex:repeat>
+
+			</table>
+		</apex:outputPanel>
+
+		<apex:actionFunction action="{!deleteRecord}" name="doRemove" reRender="resultTableId">
+			<apex:param name="recordIndex" value="" />
+		</apex:actionFunction>
+
+		<apex:actionFunction action="{!searchAccount}" name="reloadRecords" reRender="resultTableId">
+		</apex:actionFunction>
+
+	</apex:form>
+
+	<script type="text/javascript">
+	
+		function removeRecord(recordIndex)
+		{
+			console.log('recordIndex:' + recordIndex);
+			var result = confirm("Remove the record!"); 
+            if (result == true) { 
+                console.log('Remove');
+                doRemove(recordIndex);
+            } else { 
+                console.log('Cancel');
+            } 
+		}
+
+		function editRecord(recordId)
+		{
+			console.log('recordId:' + recordId);
+			centeredPopup('/apex/AccountEdit?id='+recordId,'Record',500,300,'yes');
+		}
+
+		function centeredPopup(url,winName,w,h,scroll){
+			var LeftPosition = (screen.width) ? (screen.width-w)/2 : 0;
+			var TopPosition = (screen.height) ? (screen.height-h)/2 : 0;
+			settings ='height='+h+',width='+w+',top='+TopPosition+',left='+LeftPosition+',scrollbars='+scroll+',resizable'
+			var popupWindow = window.open(url,winName,settings)
+		}
+
+	</script>
+
+</apex:page>

@@ -1,0 +1,9 @@
+.THIS .orangeColor {
+    background-color : orange;
+}
+.THIS .orangeColor, .THIS .orangeColor a{
+    color: red ;
+}
+.THIS .orangeColor svg{
+    fill: red !important;
+}

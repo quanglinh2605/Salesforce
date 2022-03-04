@@ -1,0 +1,74 @@
+<template>
+    <div class="slds-m-around_xx-large">
+        <!--Use template if:true to display/hide popup based on isModalOpen value--> 
+        <template if:true={isOpenModal}>
+            <!-- Modal/Popup Box LWC starts here -->
+            <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+                <div class="slds-modal__container">
+                    
+                    <!--HEADER START-->
+                    <header class="slds-modal__header">
+                        <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close" onclick={closeModal}>
+                            <lightning-icon icon-name="utility:close"
+                                alternative-text="close"
+                                variant="inverse"
+                                size="small" 
+                                onclick={closeModal}></lightning-icon>
+                            <span class="slds-assistive-text">Close</span>
+                        </button>
+                        <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">Student Detail</h2>
+                    </header>
+                    <!--HEADER END-->
+                    
+                    <!--NOI DUNG START-->
+                    <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                        <lightning-record-view-form record-id={student.Id} object-api-name="HocSinh__c">
+                        <!-- Using lightning:card tag with a title -->
+                        <lightning-card title="Student Details">
+                            <!-- lightning:card body section starts -->
+                                <!-- Forming a grid of two equal columns -->
+                                <div class="slds-grid">
+                                    <div class="slds-col slds-size_1-of-2">
+                                        <!-- 
+                                            Using lightning:outputField Tag with fieldName = Api name of field,
+                                            if you are using a custom field, do check you have __c in the api name
+                                        -->
+                                        <lightning-output-field field-name="HoHS__c"></lightning-output-field>    
+                                        <lightning-output-field field-name="TenHS__c"></lightning-output-field>
+                                        <div>Gioi Tinh</div>    
+                                        <div if:true={student.GioiTinh__c}>Nam</div>
+                                        <div if:false={student.GioiTinh__c}>Nu</div>
+                                        <lightning-output-field field-name="NgaySinh__c"></lightning-output-field>    
+                                    </div>
+                                    <div class="slds-col slds-size_1-of-2">
+                                        <lightning-output-field field-name="Diem1__c" ></lightning-output-field>    
+                                        <lightning-output-field field-name="Diem2__c" ></lightning-output-field>
+                                        <lightning-output-field field-name="Diem3__c" ></lightning-output-field>
+                                        <lightning-output-field field-name="DiemTB__c" ></lightning-output-field>
+                                        <lightning-output-field field-name="TinhTrang__c" ></lightning-output-field>    
+                                    </div>
+                                </div>
+                        </lightning-card>        
+                        </lightning-record-view-form>
+                    </div>
+                    <!--NOI DUNG END-->
+                    
+                    <!--FOOTER START-->
+                    <footer class="slds-modal__footer">
+                        <lightning-button variant="neutral"
+                                          label="Delete"
+                                          title="Delete"
+                                          onclick={deleteStudent}></lightning-button>
+                        <lightning-button variant="brand"
+                                          label="Edit"
+                                          title="Edit"
+                                          onclick={updateStudent}></lightning-button>
+                    </footer>
+                    <!--FOOTER END-->
+                    
+                </div>
+            </section>
+            <div class="slds-backdrop slds-backdrop_open"></div>
+        </template>
+        </div>
+</template>

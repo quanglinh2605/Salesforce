@@ -1,0 +1,96 @@
+{
+  "status": 0,
+  "result": [
+    {
+      "createdById": "0052y000000xQ2dAAE",
+      "createdByName": "Quang Linh Võ Đức",
+      "createdDate": "2020-11-10T07:12:17.000Z",
+      "fileName": "staticresources/boostrap.resource",
+      "fullName": "boostrap",
+      "id": "0812y000000Tc9aAAC",
+      "lastModifiedById": "0052y000000xQ2dAAE",
+      "lastModifiedByName": "Quang Linh Võ Đức",
+      "lastModifiedDate": "2020-11-10T07:12:17.000Z",
+      "manageableState": "unmanaged",
+      "type": "StaticResource"
+    },
+    {
+      "createdById": "0052y000000xQ2dAAE",
+      "createdByName": "Quang Linh Võ Đức",
+      "createdDate": "2020-11-02T07:34:08.000Z",
+      "fileName": "staticresources/leaflet.resource",
+      "fullName": "leaflet",
+      "id": "0812y000000TUf3AAG",
+      "lastModifiedById": "0052y000000xQ2dAAE",
+      "lastModifiedByName": "Quang Linh Võ Đức",
+      "lastModifiedDate": "2020-11-02T07:34:08.000Z",
+      "manageableState": "unmanaged",
+      "type": "StaticResource"
+    },
+    {
+      "createdById": "0052y000000xQ2dAAE",
+      "createdByName": "Quang Linh Võ Đức",
+      "createdDate": "2020-11-02T07:34:08.000Z",
+      "fileName": "staticresources/heatmapmock.resource",
+      "fullName": "heatmapmock",
+      "id": "0812y000000TUf2AAG",
+      "lastModifiedById": "0052y000000xQ2dAAE",
+      "lastModifiedByName": "Quang Linh Võ Đức",
+      "lastModifiedDate": "2020-11-02T07:34:08.000Z",
+      "manageableState": "unmanaged",
+      "type": "StaticResource"
+    },
+    {
+      "createdById": "0052y000000xQ2dAAE",
+      "createdByName": "Quang Linh Võ Đức",
+      "createdDate": "2020-11-02T07:34:08.000Z",
+      "fileName": "staticresources/heatmap.resource",
+      "fullName": "heatmap",
+      "id": "0812y000000TUf1AAG",
+      "lastModifiedById": "0052y000000xQ2dAAE",
+      "lastModifiedByName": "Quang Linh Võ Đức",
+      "lastModifiedDate": "2020-11-02T07:34:08.000Z",
+      "manageableState": "unmanaged",
+      "type": "StaticResource"
+    },
+    {
+      "createdById": "0052y000000xQ2dAAE",
+      "createdByName": "Quang Linh Võ Đức",
+      "createdDate": "2020-11-02T07:34:09.000Z",
+      "fileName": "staticresources/nouislider.resource",
+      "fullName": "nouislider",
+      "id": "0812y000000TUf5AAG",
+      "lastModifiedById": "0052y000000xQ2dAAE",
+      "lastModifiedByName": "Quang Linh Võ Đức",
+      "lastModifiedDate": "2020-11-02T07:34:09.000Z",
+      "manageableState": "unmanaged",
+      "type": "StaticResource"
+    },
+    {
+      "createdById": "0052y000000xQ2dAAE",
+      "createdByName": "Quang Linh Võ Đức",
+      "createdDate": "2020-11-02T07:34:09.000Z",
+      "fileName": "staticresources/leaflet1.resource",
+      "fullName": "leaflet1",
+      "id": "0812y000000TUf4AAG",
+      "lastModifiedById": "0052y000000xQ2dAAE",
+      "lastModifiedByName": "Quang Linh Võ Đức",
+      "lastModifiedDate": "2020-11-02T07:34:09.000Z",
+      "manageableState": "unmanaged",
+      "type": "StaticResource"
+    },
+    {
+      "createdById": "0052y000000xQ2dAAE",
+      "createdByName": "Quang Linh Võ Đức",
+      "createdDate": "2020-11-02T07:34:08.000Z",
+      "fileName": "staticresources/countup7.resource",
+      "fullName": "countup7",
+      "id": "0812y000000TUf0AAG",
+      "lastModifiedById": "0052y000000xQ2dAAE",
+      "lastModifiedByName": "Quang Linh Võ Đức",
+      "lastModifiedDate": "2020-11-02T07:34:08.000Z",
+      "manageableState": "unmanaged",
+      "type": "StaticResource"
+    }
+  ]
+}

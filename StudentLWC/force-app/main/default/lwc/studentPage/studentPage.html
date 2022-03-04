@@ -1,0 +1,120 @@
+<template>
+    <table style="margin-left: 0px; width: 700px;">
+        <tr>
+            <td>Ten: </td>
+            <td>
+                <lightning-input type="text" value={ten} data-field="nameStd" variant="label-hidden"></lightning-input>
+            </td>
+            <td><span style="margin-left: 15px;"></span></td>
+            <td><lightning-input type="checkbox" label="Sap xep tang dan theo ten" data-field="isSortByName"></lightning-input></td>
+        </tr>
+        <tr>
+            <td>Lop: </td>
+            <td><lightning-combobox
+                value={lopId}
+                options={options} data-field="lopId" variant="label-hidden"></lightning-combobox></td>
+        </tr>
+        <tr>
+            <td>Ngay sinh:</td>
+            <td><lightning-input type="date" variant="label-hidden" data-field="beginDate" value={beginDate}></lightning-input></td>
+            <td><p style="padding-left: 40px; font-weight: bold;font-size: 40px;">~</p></td>
+            <td><lightning-input type="date" variant="label-hidden" data-field="endDate" value={endDate}></lightning-input></td>
+        </tr>
+        <tr>
+            <td></td> 
+            <td><lightning-button variant="Neutral" label="SearchStudent" title="Search Student" onclick={handleSearch} class="slds-m-left_x-small"></lightning-button></td>
+            <td><lightning-button variant="Neutral" label="New" title="Create Student" onclick={OpenCreateModal} class="slds-m-left_x-small"></lightning-button></td>
+            <td><lightning-button variant="Neutral" label="Xoa" title="Delete" onclick={multiDelete} class="slds-m-left_x-small"></lightning-button></td>
+        </tr>
+    </table>
+
+    <br/><br/>
+    <span style="font-size: large;font-weight: bold;">So Luong: {recordsToDisplay.length}</span>
+    <lightning-datatable columns={columns} 
+                         data={recordsToDisplay} 
+                         key-field="id" 
+                         onrowaction={handleRowAction} 
+                         onrowselection={handelRowSelection}></lightning-datatable>
+    
+    <c-create-student-page is-open-modal={isOpenCreate} 
+                            onsetfalse={closeModal} 
+                            onsetreload={reloadPage} ></c-create-student-page>
+    
+    <c-edit-student-page is-open-modal={isOpenEdit} 
+                         student={std} 
+                         onsetfalse={closeModal} 
+                         onsetreload={reloadPage}></c-edit-student-page>
+    
+    <c-detail-student-page  is-open-modal={isOpenDetail} 
+                            student={std} 
+                            onsetfalse={closeModal} 
+                            onopenedit={openEdit}
+                            ondelete={reloadPage}></c-detail-student-page>
+    <div class="slds-m-aroung_small slds-align_absolute-center">
+        <lightning-spinner if:true={isLoading} alternative-text="Loading" size="small"></lightning-spinner>
+            <div slot="actions">
+                <template if:false={first}>
+                    <lightning-button
+                    variant="neutral"
+                    title="first"
+                    label="First"
+                    class="slds-float_left"
+                    icon-name="utility:chevronleft"
+                    icon-position="left"
+                    onclick={handleClick}
+                    ></lightning-button>
+                &nbsp;
+                    <lightning-button
+                    variant="neutral"
+                    title="previous"
+                    class="slds-float_left"
+                    label="Previous"
+                    icon-name="utility:chevronleft"
+                    icon-position="left"
+                    onclick={handleClick}
+                    ></lightning-button>    
+                </template>
+                    <template if:true={pagelinks}>
+                        <lightning-button-group>
+                            <template for:each={pagelinks} for:item="page">
+                            <lightning-button
+                                key={page}
+                                label={page}
+                                onclick={handlePage}
+                            ></lightning-button>
+                            </template>
+                        </lightning-button-group>
+                    </template>
+                <template if:false={end}>
+                    <lightning-button
+                        variant="neutral"
+                        title="last"
+                        class="slds-float_right"
+                        label="Last"
+                        icon-name="utility:chevronright"
+                        icon-position="right"
+                        onclick={handleClick}
+                        ></lightning-button>
+                        &nbsp;
+                        <lightning-button
+                        variant="neutral"
+                        title="next"
+                        class="slds-float_right"
+                        label="Next"
+                        icon-name="utility:chevronright"
+                        icon-position="right"
+                        onclick={handleClick}
+                        ></lightning-button>
+                </template>    
+            </div>
+    </div>
+    <div class="slds-m-top_small"></div>
+    <h2 class="slds-m-aroung_small slds-align_absolute-center" style="color: firebrick;">Displaying Page No:</h2>
+        <strong>&nbsp;{pageNo}/{totalPages}&nbsp;</strong>and displaying records
+        <template if:true={end}>
+            from {endRecord}/{totalRecords}
+        </template>
+        <template if:false={end}>
+            from ({startRecord}-{endRecord})/{totalRecords}
+        </template>                        
+</template>

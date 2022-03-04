@@ -1,0 +1,82 @@
+<aura:component controller="StudentLightningCtrl">
+    
+    <aura:method name ="detailStudent" action="{!c.getModalStudent}">
+        <aura:attribute name="student" type="HocSinh__c"/>
+    </aura:method>
+
+    <aura:attribute name="isModalOpen" type="boolean" default="false"/>
+    <aura:attribute name="currentStudent" type="HocSinh__c"/>
+ 
+    <div class="slds-m-around_xx-large">
+        
+        <aura:if isTrue="{!v.isModalOpen}">
+            
+            <!-- Modal/Popup Box starts here-->
+            <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+                <div class="slds-modal__container">
+                    
+                    <!--HEADER START-->
+                    <header class="slds-modal__header">
+                        <lightning:buttonIcon iconName="utility:close"
+                                              onclick="{! c.closeModel }"
+                                              alternativeText="close"
+                                              variant="bare-inverse"
+                                              class="slds-modal__close"/>
+                        <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">Detail Student</h2>
+                    </header>
+                    <!--HEADER END-->
+                    
+                    <!--NOI DUNG START-->
+                    <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                        <lightning:recordViewForm recordId="{!v.currentStudent.Id}" objectApiName="HocSinh__c">
+                        <!-- Using lightning:card tag with a title -->
+                        <lightning:card title="Student Details">
+                            <!-- lightning:card body section starts -->
+                            <p class="slds-p-horizontal_small">
+                                <!-- Forming a grid of two equal columns -->
+                                <div class="slds-grid">
+                                    <div class="slds-col slds-size_1-of-2">
+                                        <!-- 
+                                            Using lightning:outputField Tag with fieldName = Api name of field,
+                                            if you are using a custom field, do check you have __c in the api name
+                                        -->
+                                        <lightning:outputField fieldName="HoHS__c" />    
+                                        <lightning:outputField fieldName="TenHS__c" />
+                                        <div>Gioi Tinh</div>    
+                                        <lightning:formattedText value="{!if(v.currentStudent.GioiTinh__c,'Nam', 'Nu')}"/>
+                                        <lightning:outputField fieldName="NgaySinh__c" />    
+                                    </div>
+                                    <div class="slds-col slds-size_1-of-2">
+                                        <lightning:outputField fieldName="Diem1__c" />    
+                                        <lightning:outputField fieldName="Diem2__c" />
+                                        <lightning:outputField fieldName="Diem3__c" />
+                                        <lightning:outputField fieldName="DiemTB__c" />
+                                        <lightning:outputField fieldName="TinhTrang__c" />    
+                                    </div>
+                                </div>
+                            </p>
+                        </lightning:card>        
+                        </lightning:recordViewForm>
+                    </div>
+                    <!--NOI DUNG END-->
+
+                    <!--FOOTER START-->
+                    <footer class="slds-modal__footer">
+                        <lightning:button variant="neutral"
+                                          label="Edit"
+                                          title="Edit"
+                                          onclick="{!c.editStudent }"/>
+                        <lightning:button variant="brand"
+                                          label="Delete"
+                                          title="Delete"
+                                          onclick="{!c.deleteStudent}"/>
+                    </footer>
+                    <!--FOOTER END-->
+                </div>
+            </section>
+            <div class="slds-backdrop slds-backdrop_open"></div>
+        </aura:if>
+    </div>
+    <c:EditStudent aura:id="edit_student"/>
+    <c:DeleteStudent aura:id="delete_student"/>    
+</aura:component>	

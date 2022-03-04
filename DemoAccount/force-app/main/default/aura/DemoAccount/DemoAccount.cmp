@@ -1,0 +1,70 @@
+<aura:component controller="AccountLightningCtrl" implements="flexipage:availableForAllPageTypes">
+    
+    <aura:attribute name="searchCondition" type="String"/>
+    <aura:attribute name="accounts" type="Account[]"/>
+    
+    <!--init SF hỗ trợ sẽ gọi đầu tiên sau khi load page, gọi chạy hàm doInit-->
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+
+    <aura:handler name="reload_evt" event="c:account_reload_evt" action="{!c.handleReloadEvent}"/>
+    
+    <lightning:input type="text" variant="label-hidden" value="{!v.searchCondition}" />
+    
+    <br/>
+    
+    <div>
+        
+        <lightning:button onclick="{!c.search}"
+                          label="Search"
+                          iconName="utility:search"
+                          iconPosition="left"
+                          variant="neutral"
+                          type="submit"/>
+        
+        <lightning:button onclick="{!c.newAccount}"
+                          label="New"
+                          iconName="utility:new"
+                          iconPosition="left"
+                          variant="neutral"
+                          class="slds-size_4-of-10"
+                          type="submit"/>
+        
+    </div>
+    
+    <br/>
+    
+    <table class="slds-table slds-no-row-hover slds-table_bordered">
+        <colgroup>
+            <col width="5%"/>
+            <col width="60%"/>
+            <col width="35%"/>
+        </colgroup>
+        <thead>
+            <tr class="slds-text-heading_label">
+                <th scope="col">STT</th>
+                <th scope="col">Name</th>
+                <th scope="col">Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            <aura:iteration items="{!v.accounts}" var="item" indexVar="index">
+                <tr>
+                    <td>
+                        {!index+1}
+                    </td>
+                    <td>
+                        {!item.Name}
+                    </td>
+                    <td>
+                        <lightning:buttonIcon name="{!item.Id}" onclick="{!c.editAccount}" size="small" iconName="utility:edit" alternativeText="Edit"/>
+                        <lightning:buttonIcon name="{!item.Id}" onclick="{!c.deleteAccount}" size="small" iconName="utility:delete" alternativeText="Delete"/>
+                    </td>
+                </tr>
+            </aura:iteration>
+        </tbody>
+    </table>
+    
+    <c:EditModalCustom aura:id="account_model" />
+    <c:DeleteModalCustom aura:id="confirm_delete_modal" />
+    
+</aura:component>

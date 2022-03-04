@@ -1,0 +1,109 @@
+<!--/**
+* Name page：       Detail Student
+* Function name:  　Information detail a student
+* @created：        2020/12/08 Linh Vo Duc Quang
+* @modified： 
+*/-->
+<apex:page controller="StudentController" showHeader="false" sidebar="false" docType="HTML-5.0" action="{!initStudentById}">
+    <apex:stylesheet value="{!URLFOR($Resource.student, 'staticresources/css/student.css')}"/>  
+    <apex:form id="detailForm">
+        <apex:outputPanel id="tstpopupPanel">
+            <apex:outputPanel styleClass="popupBackground" layout="block" id="popupBackgroundPanel"/>
+            <apex:outputPanel styleClass="custPopup" layout="block" id="custPopupPanel">
+                Do you want to delele?.<br/><br/><br/>
+                <apex:commandButton id="deleteButton" value="Delete" onclick="removeStudent();return false;"/>
+                <apex:commandButton id="cancelButton" value="Cancel" onclick="cancel();return false;"/>
+            </apex:outputPanel>
+        </apex:outputPanel>
+        <apex:pageBlock title="Student" mode="edit">
+            <a href="/apex/studentPage" class="js-overlay">Quay lai</a>
+            <apex:pageBlockSection title="Detail Student" columns="2">
+                <apex:outputPanel >
+                    <table>
+                        <tr>
+                            <td>Ho</td>
+                            <td>{!currentStudent.HoHS__c}</td>
+                        </tr>
+                        <tr>
+                            <td>Ten</td>
+                            <td>{!currentStudent.TenHS__c}</td>
+                        </tr>
+                        <tr>
+                            <td>Gioi tinh</td>
+                            <td><apex:outputText value="{!IF(currentStudent.GioiTinh__c, 'Nam', 'Nu')}"/></td>
+                        </tr>
+                        <tr>
+                            <td>Ngay sinh</td>
+                            <td><apex:outputText value="{0,date, dd/MM/yyyy}"><apex:param value="{!currentStudent.NgaySinh__c}"/></apex:outputText></td>
+                        </tr>
+                        <tr>
+                            <td>Diem 1</td>
+                            <td>{!currentStudent.Diem1__c}</td>
+                        </tr>
+                        <tr>
+                            <td>Diem 2</td>
+                            <td>{!currentStudent.Diem2__c}</td>
+                        </tr>
+                        <tr>
+                            <td>Diem 3</td>
+                            <td>{!currentStudent.Diem3__c}</td>
+                        </tr>
+                        <tr>
+                            <td>Diem TB</td>
+                            <td>{!currentStudent.DiemTB__c}</td>
+                        </tr>
+                        <tr>
+                            <td>Tinh Trang</td>
+                            <td>{!currentStudent.TinhTrang__c}</td>
+                        </tr>
+                    </table>
+                </apex:outputPanel>
+            </apex:pageBlockSection>
+        </apex:pageBlock>
+
+        <apex:commandButton onclick="editRecord('{!currentStudent.Id}'); return false;" styleClass="js-overlay" value="Edit" id="editButton" />
+        <apex:commandButton onclick="removeRecord('{!currentStudent.Id}'); return false;" styleClass="js-overlay" value="Delete" id="removeButton" />
+
+        <apex:actionFunction action="{!deleteRecord}" name="doRemove" reRender="resultTable">
+            <apex:param name="studentId" value="" />
+        </apex:actionFunction>
+
+        <apex:actionFunction action="{!gotoEditStudentPage}" name="EditStudent" reRender="resultTable">
+            <apex:param name="studentId" value="" />
+        </apex:actionFunction>
+
+        <apex:actionFunction action="{!reloadPage}" name="reloadPage">
+        </apex:actionFunction>
+    </apex:form>
+    <apex:includeScript value="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js" />
+    <apex:includeScript value="{!URLFOR($Resource.student, 'staticresources/js/loadingoverlay.js')}"/>
+    <script type="text/javascript">
+        j$ = jQuery.noConflict();
+        var studentId = '';
+        
+        j$('.js-overlay').on('click', function() {
+            j$('[id$=detailForm]').LoadingOverlay('show');
+        })
+
+        function removeRecord(recordId) {
+                studentId = recordId;
+                j$('[id$=popupBackgroundPanel]').css('display', 'block');
+                j$('[id$=custPopupPanel]').css('display', 'block');
+                return false;
+            }
+
+        function removeStudent() {
+            j$('[id$=popupBackgroundPanel]').css('display', 'none');
+            j$('[id$=custPopupPanel]').css('display', 'none');
+            if(studentId != ''){
+                doRemove(studentId);
+                studentId = '';
+            }
+            reloadPage();
+        }
+
+        function editRecord(recordId) {
+            EditStudent(recordId);
+        }
+    </script>               
+</apex:page>
